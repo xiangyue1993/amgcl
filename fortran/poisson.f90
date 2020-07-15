@@ -67,10 +67,14 @@ program poisson
 
     ! Create solver, printout its structure.
     solver = amgcl_solver_create(n2, ptr, col, val, params)
-    call amgcl_solver_report(solver)
-
+    !call amgcl_solver_report(solver)
+    !
     ! Solve the problem for the given right-hand-side.
     cnv = amgcl_solver_solve(solver, rhs, x)
+    write(*,"('Iterations:', I3, ', residual: ', E13.6)") cnv%iterations, cnv%residual
+    
+    x = 0
+    cnv = amgcl_solver_solve_mtx(solver, ptr, col, val, rhs, x)
     write(*,"('Iterations:', I3, ', residual: ', E13.6)") cnv%iterations, cnv%residual
 
     ! Destroy solver and parameter pack.
